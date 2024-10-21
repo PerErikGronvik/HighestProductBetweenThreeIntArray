@@ -45,12 +45,12 @@ public class HighestProductOf3 {
         int productOf3Highest = highest * secondHighest * thirdHighest;
         int productOf2LowestAndHighest = lowest * secondLowest * highest;
 
-        // Find the highest product
+        // Find the highest product to remove faulty logic
         int highestProduct = Math.max(productOf3Highest, productOf2LowestAndHighest);
 
         // If the highest product is less than or equal to zero
         if (highestProduct <= 0) {
-            // Check if zero is present in the array
+            // Perform zero check outside the main loop, to avoid efficiency loss.
             boolean hasZero = false;
             for (int number : array) {
                 if (number == 0) {
@@ -58,8 +58,21 @@ public class HighestProductOf3 {
                     break;
                 }
             }
-            if (hasZero) {
-                return new int[]{0, 0, 0};
+
+            // Handle the rare edge case
+            if (hasZero && highestProduct == 0 && highest <= 0) {
+                // Check if not all numbers are zero, because then the product is considered defined.
+                boolean allZero = true;
+                for (int number : array) {
+                    if (number != 0) {
+                        allZero = false;
+                        break;
+                    }
+                }
+                // I have chosen to say products that contain free variables are not able to be defined. I could have returned any random combination with zero and be slightly mathematically wrong, in some cases this is desired to avoid exceptions. This is a tradeof.
+                if (!allZero && array.length != 3) {
+                    throw new IllegalArgumentException("One of the numbers of the highest product is zero, this causes the other values to be free. Thus, the highest product cannot be defined.");
+                }
             }
         }
 
