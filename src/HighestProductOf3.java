@@ -9,24 +9,35 @@ public class HighestProductOf3 {
         int lowest = Integer.MAX_VALUE, secondLowest = Integer.MAX_VALUE;
 
         for (int number : array) {
-            // Update highest values
-            if (number > highest) {
-                thirdHighest = secondHighest;
-                secondHighest = highest;
-                highest = number;
-            } else if (number > secondHighest) {
-                thirdHighest = secondHighest;
-                secondHighest = number;
-            } else if (number > thirdHighest) {
-                thirdHighest = number;
+            // Update highest values using nested if statements to increase efficiency. Loss of readability
+            if (number > thirdHighest) { // Log n
+                if (number > secondHighest) { // log n of log n
+                    if (number > highest) { // log n of log n of log n
+                        // Update highest values
+                        thirdHighest = secondHighest;
+                        secondHighest = highest;
+                        highest = number;
+                    } else {
+                        // Update second and third highest
+                        thirdHighest = secondHighest;
+                        secondHighest = number;
+                    }
+                } else {
+                    // Update third highest
+                    thirdHighest = number;
+                }
             }
 
             // Update lowest values
-            if (number < lowest) {
-                secondLowest = lowest;
-                lowest = number;
-            } else if (number < secondLowest) {
-                secondLowest = number;
+            if (number < secondLowest) { // log n
+                if (number < lowest) { // log n of log n
+                    // Update lowest values
+                    secondLowest = lowest;
+                    lowest = number;
+                } else {
+                    // Update second lowest
+                    secondLowest = number;
+                }
             }
         }
 
